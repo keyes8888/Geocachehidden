@@ -15,8 +15,9 @@ body {
     color: #eee;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     overflow-x: hidden;
+    padding: 40px 20px;
 }
 
 /* --- Main Container --- */
@@ -71,12 +72,19 @@ h1 {
 }
 
 /* --- Inputs and Buttons --- */
+.input-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
 input[type=text] {
     padding: 14px 20px;
     font-size: 16px;
     border-radius: 12px;
     border: 1px solid #555;
-    margin-right: 12px;
+    margin: 10px;
     width: 250px;
     transition: border 0.3s ease;
 }
@@ -84,7 +92,6 @@ input[type=text]:focus {
     outline: none;
     border: 2px solid #00ffcc;
 }
-
 button {
     padding: 14px 30px;
     font-size: 16px;
@@ -94,6 +101,7 @@ button {
     background: #00ffcc;
     color: #111;
     font-weight: 700;
+    margin: 10px;
     transition: background 0.3s ease, transform 0.2s ease;
 }
 button:hover {
@@ -135,22 +143,32 @@ button:hover {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 15px;
+    gap: 10px;
     margin-top: 15px;
 }
 #masterDisplay li {
     background: #ffbb55;
     color: #111;
-    padding: 10px 20px;
-    border-radius: 25px;
+    padding: 6px 12px;
+    border-radius: 20px;
     font-weight: 700;
+    font-size: 0.9rem;
     cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.4);
     transition: transform 0.2s ease, background 0.3s ease;
 }
 #masterDisplay li:hover {
     transform: scale(1.1);
     background: #ffaa33;
+}
+
+/* --- Final Coordinates --- */
+#coordinates {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-top: 25px;
+    color: #00ff99;
+    text-align: center;
 }
 
 /* --- Animations --- */
@@ -163,8 +181,8 @@ button:hover {
 @media(max-width: 768px){
     h1 { font-size: 2.2rem; }
     .cipher { font-size: 1.6rem; line-height: 2rem; }
-    input[type=text] { width: 200px; margin-bottom: 10px; }
-    button { width: 100%; margin-top: 10px; }
+    input[type=text] { width: 200px; margin: 5px; }
+    button { width: 100%; margin: 5px; }
 }
 </style>
 </head>
@@ -184,15 +202,19 @@ button:hover {
       <span>🔺 🌀 ✉️ 🌊 🔑 🍎 🔺 🔑 🌀 ✉️</span><br>
       <span>🌊 🔑 🍎 🔺 🔑 🌀 ✉️ 🌊 🍎 🔑</span>
     </div>
-    <input type="text" id="cipherInput" placeholder="Decode the cipher">
-    <button onclick="checkCipher()">Submit</button>
+    <div class="input-container">
+      <input type="text" id="cipherInput" placeholder="Decode the cipher">
+      <button onclick="checkCipher()">Submit</button>
+    </div>
   </div>
 
   <div class="section" id="mathSection">
     <div id="mathPuzzle"></div>
     <p><strong>Step 2:</strong> Enter the Step 1 password or solve the math puzzle:</p>
-    <input type="text" id="passwordInput" placeholder="Enter password" disabled>
-    <button onclick="checkFinalPassword()">Unlock</button>
+    <div class="input-container">
+      <input type="text" id="passwordInput" placeholder="Enter password" disabled>
+      <button onclick="checkFinalPassword()">Unlock</button>
+    </div>
   </div>
 
   <div id="feedback"></div>
@@ -216,7 +238,6 @@ let masterCipherEarned = false;
 let masterMathEarned = false;
 let currentMathAnswer = 0;
 
-// Display earned passwords
 function displayMasterPasswords(){
     const list = document.getElementById("masterList");
     list.innerHTML = "";
