@@ -59,7 +59,7 @@
 </head>
 <body>
 <div class="container">
-    <h1>Zodiac Cipher Challenge</h1>
+    <h1>Zodiac Cipher Geocache</h1>
     <p>Decode the symbols below to find today's password:</p>
 
     <div id="cipher">
@@ -90,14 +90,19 @@
 
 <script>
 const correctCipherPassword = "GEOCACHE";
-const masterPassword = "MARCUSPATRICK";
-let finalCoordinates = "1-2-3-4-Marcus-Patrick-x-10";
+const finalCoordinates = "1-2-3-4-Marcus-Patrick-x-10";
 
-// --- Dynamic math puzzle ---
+// Master passwords
+const masterGlobal = "MARCUSPATRICK";   // works anywhere
+let masterCipherEarned = false;         // earned after Step 1
+let masterMathEarned = false;           // earned after Step 2
+const masterCipherPassword = "CIPHERMASTER";  
+const masterMathPassword = "MATHMASTER";
+
 let currentMathAnswer = 0;
 
+// --- Generate math puzzle ---
 function generateMathPuzzle() {
-    // Simple dynamic math problem: random addition/subtraction
     const a = Math.floor(Math.random() * 50) + 1;
     const b = Math.floor(Math.random() * 50) + 1;
     const op = Math.random() < 0.5 ? '+' : '-';
@@ -117,19 +122,21 @@ function checkCipher() {
     const input = document.getElementById("cipherInput").value.trim().toUpperCase();
     const feedback = document.getElementById("feedback");
     const passwordEl = document.getElementById("password");
-    const coordsEl = document.getElementById("coordinates");
     const finalInput = document.getElementById("passwordInput");
 
-    if (input === correctCipherPassword || input === masterPassword.toUpperCase()) {
+    // Global or earned master password for Step 1
+    if (input === correctCipherPassword || input === masterGlobal.toUpperCase() || masterCipherEarned) {
         feedback.innerText = "Cipher correct! Solve the math puzzle below or use the revealed password.";
         passwordEl.innerText = `Today's password is: ${correctCipherPassword}`;
         finalInput.disabled = false;
         document.getElementById("mathPuzzle").style.display = "block";
         generateMathPuzzle();
+        masterCipherEarned = true; // earn Step 1 master password
+        console.log(`You have earned the Step 1 master password: ${masterCipherPassword}`);
     } else {
         feedback.innerText = "YOU HAVE GOT IT WRONG";
         passwordEl.innerText = "";
-        coordsEl.innerText = "";
+        document.getElementById("coordinates").innerText = "";
         finalInput.disabled = true;
         document.getElementById("mathPuzzle").style.display = "none";
     }
@@ -143,21 +150,27 @@ function checkFinalPassword() {
     const passwordEl = document.getElementById("password");
     const coordsEl = document.getElementById("coordinates");
 
-    // Allow master password at any time
-    if (input === masterPassword.toUpperCase()) {
+    // Global master password always works
+    if(input === masterGlobal.toUpperCase()) {
         feedback.innerText = "Congratulations!";
         passwordEl.innerText = `Master access granted`;
         coordsEl.innerText = finalCoordinates;
+        masterMathEarned = true; // earn Step 2 master password too
+        console.log(`You have earned the Step 2 master password: ${masterMathPassword}`);
         return;
     }
 
-    // Check if Step 1 was correct or master password, then check math answer
-    if (cipherInput === correctCipherPassword || cipherInput === masterPassword.toUpperCase()) {
-        // Accept either the correct cipher password again OR the math puzzle answer
-        if (input === correctCipherPassword || parseInt(input) === currentMathAnswer) {
+    // Step 1 must be valid (solved or Step 1 master earned)
+    const step1Valid = cipherInput === correctCipherPassword || input === masterCipherPassword.toUpperCase() || masterCipherEarned;
+
+    if(step1Valid) {
+        // Accept correct cipher password, correct math answer, or Step 2 master
+        if(input === correctCipherPassword || parseInt(input) === currentMathAnswer || input === masterMathPassword.toUpperCase() || masterMathEarned) {
             feedback.innerText = "Congratulations!";
             passwordEl.innerText = `Today's password is: ${correctCipherPassword}`;
             coordsEl.innerText = finalCoordinates;
+            masterMathEarned = true; // earn Step 2 master password
+            console.log(`You have earned the Step 2 master password: ${masterMathPassword}`);
         } else {
             feedback.innerText = "YOU HAVE GOT IT WRONG";
             passwordEl.innerText = "";
@@ -172,7 +185,8 @@ function checkFinalPassword() {
 
 // --- Console hints ---
 console.log("Hint: Some symbols repeat. Recognize the patterns to decode 'GEOCACHE'.");
-console.log("Math puzzle changes every 1 minute. Master password 'marcuspatrick' works anytime.");
+console.log("Math puzzle changes every 1 minute.");
+console.log("Global master password: MARCUSPATRICK");
 </script>
 </body>
 </html>
