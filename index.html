@@ -3,11 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zodiac Cipher Geocache</title>
+<title>Daily Lorenz Cipher Geocache</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
 /* --- General Page Styles --- */
-* { box-sizing: border-box; margin: 0; padding: 0; }
 body {
     font-family: 'Roboto', sans-serif;
     min-height: 100vh;
@@ -19,8 +18,6 @@ body {
     overflow-x: hidden;
     padding: 40px 20px;
 }
-
-/* --- Main Container --- */
 .container {
     background: #1c1c1c;
     border-radius: 25px;
@@ -31,10 +28,9 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
     animation: fadeIn 1s ease;
 }
-
-/* --- Headings --- */
 h1 {
     color: #00ffcc;
     font-size: 3rem;
@@ -43,8 +39,6 @@ h1 {
     text-align: center;
     letter-spacing: 2px;
 }
-
-/* --- Sections --- */
 .section {
     background: #262626;
     border-radius: 20px;
@@ -52,27 +46,18 @@ h1 {
     margin-bottom: 30px;
     width: 100%;
     max-width: 900px;
-    transition: transform 0.3s ease, background 0.3s ease, opacity 0.5s ease;
-    text-align: center; /* center all text in sections */
-}
-.section:hover {
-    transform: translateY(-3px);
-    background: #2d2d2d;
-}
-
-/* --- Cipher Display --- */
-.cipher {
-    font-size: 2rem;
-    line-height: 2.5rem;
     text-align: center;
+    transition: transform 0.3s ease, background 0.3s ease, opacity 0.5s ease;
+}
+.section:hover { transform: translateY(-3px); background: #2d2d2d; }
+.cipher {
+    font-family: monospace;
+    font-size: 1.8rem;
     background: #111;
     padding: 25px;
     border-radius: 20px;
     margin-bottom: 25px;
-    letter-spacing: 3px;
 }
-
-/* --- Inputs and Buttons --- */
 .input-container {
     display: flex;
     justify-content: center;
@@ -89,10 +74,7 @@ input[type=text] {
     width: 250px;
     transition: border 0.3s ease;
 }
-input[type=text]:focus {
-    outline: none;
-    border: 2px solid #00ffcc;
-}
+input[type=text]:focus { outline: none; border: 2px solid #00ffcc; }
 button {
     padding: 14px 30px;
     font-size: 16px;
@@ -105,12 +87,7 @@ button {
     margin: 10px;
     transition: background 0.3s ease, transform 0.2s ease;
 }
-button:hover {
-    background: #00ddbb;
-    transform: translateY(-2px);
-}
-
-/* --- Feedback Banners --- */
+button:hover { background: #00ddbb; transform: translateY(-2px); }
 #feedback {
     font-size: 1.3rem;
     font-weight: 700;
@@ -124,17 +101,8 @@ button:hover {
     text-align: center;
     transition: all 0.3s ease;
 }
-
-/* --- Math Puzzle --- */
-#mathSection {
-    opacity: 0;
-    transform: translateX(100%);
-}
-#mathSection.active {
-    opacity: 1;
-    transform: translateX(0);
-    transition: transform 0.7s ease, opacity 0.7s ease;
-}
+#mathSection { opacity: 0; transform: translateX(100%); }
+#mathSection.active { opacity: 1; transform: translateX(0); transition: transform 0.7s ease, opacity 0.7s ease; }
 #mathPuzzle {
     font-size: 1.5rem;
     color: #ff77ff;
@@ -146,8 +114,6 @@ button:hover {
     display: none;
     text-align: center;
 }
-
-/* --- Master Passwords Display --- */
 #masterDisplay ul {
     list-style: none;
     display: flex;
@@ -167,12 +133,7 @@ button:hover {
     box-shadow: 0 3px 8px rgba(0,0,0,0.4);
     transition: transform 0.2s ease, background 0.3s ease;
 }
-#masterDisplay li:hover {
-    transform: scale(1.1);
-    background: #ffaa33;
-}
-
-/* --- Final Coordinates --- */
+#masterDisplay li:hover { transform: scale(1.1); background: #ffaa33; }
 #coordinates {
     font-size: 2rem;
     font-weight: 700;
@@ -180,66 +141,43 @@ button:hover {
     color: #00ff99;
     text-align: center;
 }
-
-/* --- Animations --- */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* --- Responsive --- */
-@media(max-width: 768px){
-    h1 { font-size: 2.2rem; }
-    .cipher { font-size: 1.6rem; line-height: 2rem; }
-    input[type=text] { width: 200px; margin: 5px; }
-    button { width: 100%; margin: 5px; }
-}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+@media(max-width: 768px){ h1 { font-size: 2.2rem; } .cipher { font-size: 1.6rem; } input[type=text] { width: 200px; margin: 5px; } button { width: 100%; margin: 5px; } }
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>Zodiac Cipher Geocache</h1>
+<h1>Daily Lorenz Cipher Geocache</h1>
 
-  <div class="section">
-    <p><strong>Step 1:</strong> Decode the cipher below:</p>
-    <div class="cipher" id="cipher">
-      <span>🌀 ✉️ 🔺 🌊 🍎 🔑 🌀 🔺 ✉️ 🌊</span><br>
-      <span>🔑 🌀 🌊 🔺 ✉️ 🍎 🔑 🔺 🌊 🌀</span><br>
-      <span>🌊 🔑 ✉️ 🍎 🔺 🔑 🌀 ✉️ 🌊 🔺</span><br>
-      <span>🍎 🔑 🌀 🌊 🔺 ✉️ 🔑 🍎 🌊 ✉️</span><br>
-      <span>🌀 🔑 🔺 🌊 🍎 🔑 ✉️ 🌀 🔺 🌊</span><br>
-      <span>✉️ 🔑 🍎 🌊 🔺 🌀 ✉️ 🔑 🌊 🍎</span><br>
-      <span>🔺 🌀 ✉️ 🌊 🔑 🍎 🔺 🔑 🌀 ✉️</span><br>
-      <span>🌊 🔑 🍎 🔺 🔑 🌀 ✉️ 🌊 🍎 🔑</span>
-    </div>
-    <div class="input-container">
-      <input type="text" id="cipherInput" placeholder="Decode the cipher">
-      <button onclick="checkCipher()">Submit</button>
-    </div>
-  </div>
+<div class="section">
+<p><strong>Step 1:</strong> Decode today’s cipher:</p>
+<div class="cipher" id="cipherDisplay"></div>
+<div class="input-container">
+<input type="text" id="cipherInput" placeholder="Enter decoded text">
+<button onclick="checkCipher()">Submit</button>
+</div>
+</div>
 
-  <div class="section" id="mathSection">
-    <div id="mathPuzzle"></div>
-    <p><strong>Step 2:</strong> Enter the Step 1 password or solve the math puzzle:</p>
-    <div class="input-container">
-      <input type="text" id="passwordInput" placeholder="Enter password" disabled>
-      <button onclick="checkFinalPassword()">Unlock</button>
-    </div>
-  </div>
+<div class="section" id="mathSection">
+<div id="mathPuzzle"></div>
+<p><strong>Step 2:</strong> Enter the Step 1 password or solve the math puzzle:</p>
+<div class="input-container">
+<input type="text" id="passwordInput" placeholder="Enter password" disabled>
+<button onclick="checkFinalPassword()">Unlock</button>
+</div>
+</div>
 
-  <div id="feedback"></div>
-  <div id="coordinates"></div>
+<div id="feedback"></div>
+<div id="coordinates"></div>
 
-  <div id="masterDisplay">
-    <p>Earned Master Passwords:</p>
-    <ul id="masterList"></ul>
-  </div>
+<div id="masterDisplay">
+<p>Earned Master Passwords:</p>
+<ul id="masterList"></ul>
+</div>
 </div>
 
 <script>
-// --- Puzzle Logic ---
-const correctCipherPassword = "GEOCACHE";
-const finalCoordinates = "1-2-3-4-Marcus-Patrick-x-10";
+// --- Master passwords ---
 const masterGlobal = "MARCUSPATRICK";
 const masterCipherPassword = "CIPHERMASTER";
 const masterMathPassword = "MATHMASTER";
@@ -248,6 +186,7 @@ let masterCipherEarned = false;
 let masterMathEarned = false;
 let currentMathAnswer = 0;
 
+// --- Display earned passwords ---
 function displayMasterPasswords(){
     const list = document.getElementById("masterList");
     list.innerHTML = "";
@@ -259,7 +198,19 @@ function autoFill(password, step){
     if(step==='final') document.getElementById("passwordInput").value = password;
 }
 
-// Math puzzle
+// --- Daily Lorenz Cipher ---
+function pseudoRandom(seed){ let x=seed; return ()=>{ x=(x*1664525+1013904223)%4294967296; return x/4294967296; }; }
+function getDailyKey(){
+    const d = new Date(); return parseInt(`${d.getFullYear()}${(d.getMonth()+1).toString().padStart(2,'0')}${d.getDate().toString().padStart(2,'0')}`);
+}
+function lorenzCipher(text,key){ const rng=pseudoRandom(key); let out=''; for(let i=0;i<text.length;i++){ out+=String.fromCharCode(text.charCodeAt(i)^Math.floor(rng()*256)); } return out; }
+
+const correctCipherPassword = "GEOCACHE";
+const dailyKey = getDailyKey();
+const cipherText = lorenzCipher(correctCipherPassword, dailyKey);
+document.getElementById("cipherDisplay").innerText = cipherText.split('').map(c=>c.charCodeAt(0)).join(' ');
+
+// --- Math puzzle ---
 function generateMathPuzzle(){
     const a=Math.floor(Math.random()*50)+1;
     const b=Math.floor(Math.random()*50)+1;
@@ -267,9 +218,9 @@ function generateMathPuzzle(){
     currentMathAnswer = op==='+'? a+b : a-b;
     document.getElementById("mathPuzzle").innerText=`Solve this: ${a} ${op} ${b} = ?`;
 }
-setInterval(()=>{ if(document.getElementById("mathSection").classList.contains("active")) generateMathPuzzle(); }, 60000);
+setInterval(()=>{ if(document.getElementById("mathSection").classList.contains("active")) generateMathPuzzle(); },60000);
 
-// Step 1
+// --- Step 1 check ---
 function checkCipher(){
     const input=document.getElementById("cipherInput").value.trim().toUpperCase();
     const feedback=document.getElementById("feedback");
@@ -280,7 +231,7 @@ function checkCipher(){
         feedback.innerText="Cipher correct! Solve the math puzzle or use the revealed password.";
         finalInput.disabled=false;
         document.getElementById("mathPuzzle").style.display="block";
-        mathSection.classList.add("active"); // slide in
+        mathSection.classList.add("active");
         generateMathPuzzle();
         if(!masterCipherEarned){ masterCipherEarned=true; displayMasterPasswords(); }
     } else {
@@ -292,7 +243,8 @@ function checkCipher(){
     }
 }
 
-// Step 2
+// --- Step 2 check ---
+const finalCoordinates = "1-2-3-4-Marcus-Patrick-x-10";
 function checkFinalPassword(){
     const cipherInput=document.getElementById("cipherInput").value.trim().toUpperCase();
     const input=document.getElementById("passwordInput").value.trim().toUpperCase();
@@ -322,8 +274,6 @@ function checkFinalPassword(){
         coords.innerText="";
     }
 }
-
-console.log("Hint: Decode 'GEOCACHE'. Math puzzle updates every minute. Global master password: MARCUSPATRICK");
 </script>
 </body>
 </html>
