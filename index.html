@@ -6,7 +6,7 @@
         body {
             font-family: Arial;
             text-align: center;
-            margin-top: 80px;
+            margin-top: 50px;
             background: #111;
             color: #eee;
         }
@@ -19,7 +19,7 @@
         input {
             padding: 10px;
             font-size: 16px;
-            width: 100px;
+            width: 120px;
         }
         button {
             padding: 10px 20px;
@@ -27,13 +27,20 @@
             margin-left: 10px;
             cursor: pointer;
         }
-        h2 { color: #00ffcc; }
+        h1 { color: #00ffcc; }
+        h2 { color: #ffcc00; font-size: 2em; } /* bigger text for password */
+        #coordinates { 
+            margin-top: 20px; 
+            font-size: 1.5em; 
+            color: #00ff99;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>Daily Math Challenge</h1>
-    <p>Solve the following equation to get today's password:</p>
+    <p>Solve the equation to get today's password:</p>
     
     <h2 id="equation">Loading...</h2>
     
@@ -41,33 +48,40 @@
     <button onclick="checkAnswer()">Submit</button>
     
     <p id="feedback"></p>
-    <p id="password" style="color: #ffcc00; font-weight: bold;"></p>
+    <h2 id="password" style="display:none;"></h2>
+
+    <hr style="margin: 30px 0; border-color: #444;">
+    
+    <p>Enter today's password to reveal the hidden coordinates:</p>
+    <input type="text" id="passwordInput" placeholder="Enter password">
+    <button onclick="checkPassword()">Unlock</button>
+    
+    <p id="coordinates"></p>
 </div>
 
 <script>
-// Generate today's math problem
+// --- Daily Math Problem ---
 function getDayOfYear() {
     const now = new Date();
     const start = new Date(now.getFullYear(), 0, 0);
     return Math.floor((now - start) / (1000*60*60*24));
 }
 
-// Define daily problem: simple arithmetic
+// Daily problem: example formula
 function getDailyProblem() {
     const day = getDayOfYear();
-    // Example: equation = day * 7 + 3
-    const a = day + 5;      // arbitrary formula for variety
+    const a = day + 5;
     const b = 3;
     const answer = a * b;
     const equationText = `${a} × ${b} = ?`;
-    return { equationText, answer };
+    const password = `PASS-${day}`; // daily password
+    return { equationText, answer, password };
 }
 
-// Display equation
 const dailyProblem = getDailyProblem();
 document.getElementById("equation").innerText = dailyProblem.equationText;
 
-// Check user's answer
+// --- Check Math Answer ---
 function checkAnswer() {
     const userInput = parseInt(document.getElementById("userAnswer").value);
     const feedback = document.getElementById("feedback");
@@ -75,10 +89,23 @@ function checkAnswer() {
 
     if (userInput === dailyProblem.answer) {
         feedback.innerText = "Congratulations!";
-        passwordEl.innerText = `Today's password is: PASS-${getDayOfYear()}`;
+        passwordEl.style.display = "block";
+        passwordEl.innerText = `Today's password is: ${dailyProblem.password}`;
     } else {
         feedback.innerText = "You are invaluable";
-        passwordEl.innerText = "";
+        passwordEl.style.display = "none";
+    }
+}
+
+// --- Check Password to Reveal Coordinates ---
+function checkPassword() {
+    const input = document.getElementById("passwordInput").value.trim();
+    const coordsEl = document.getElementById("coordinates");
+
+    if (input === dailyProblem.password) {
+        coordsEl.innerText = "1-10-Patricks-hidden-place";
+    } else {
+        coordsEl.innerText = "Wrong password!";
     }
 }
 </script>
