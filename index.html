@@ -3,70 +3,24 @@
 <head>
     <title>Zodiac Cipher Geocache</title>
     <style>
-        body {
-            font-family: monospace;
-            text-align: center;
-            background: #111;
-            color: #eee;
-            margin-top: 40px;
-        }
-        .container {
-            background: #222;
-            padding: 40px;
-            border-radius: 15px;
-            display: inline-block;
-            max-width: 800px;
-        }
-        input {
-            padding: 10px;
-            font-size: 16px;
-            width: 220px;
-            margin-top: 10px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            margin-left: 10px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+        body { font-family: monospace; text-align: center; background: #111; color: #eee; margin-top: 40px; }
+        .container { background: #222; padding: 40px; border-radius: 15px; display: inline-block; max-width: 800px; }
+        input { padding: 10px; font-size: 16px; width: 220px; margin-top: 10px; }
+        button { padding: 10px 20px; font-size: 16px; margin-left: 10px; cursor: pointer; margin-top: 10px; }
         h1 { color: #00ffcc; }
         #password { font-size: 2em; color: #ffcc00; margin-top: 15px; }
-        #coordinates { 
-            margin-top: 20px; 
-            font-size: 1.5em; 
-            color: #00ff99;
-            font-weight: bold;
-        }
+        #coordinates { margin-top: 20px; font-size: 1.5em; color: #00ff99; font-weight: bold; }
         #feedback { font-size: 1.2em; margin-top: 15px; }
-        #cipher {
-            font-size: 1.3em; 
-            line-height: 1.6em; 
-            text-align: left;
-            margin: 20px auto;
-            background: #111;
-            padding: 15px;
-            border-radius: 10px;
-            width: fit-content;
-        }
+        #cipher { font-size: 1.3em; line-height: 1.6em; text-align: left; margin: 20px auto; background: #111; padding: 15px; border-radius: 10px; width: fit-content; }
         .line { display: block; }
-        #mathPuzzle { 
-            margin-top: 20px; 
-            font-size: 1.3em; 
-            color: #ff77ff;
-        }
-        #masterDisplay {
-            margin-top: 15px;
-            font-size: 1.2em;
-            color: #ffbb55;
-        }
+        #mathPuzzle { margin-top: 20px; font-size: 1.3em; color: #ff77ff; }
+        #masterDisplay { margin-top: 15px; font-size: 1.2em; color: #ffbb55; }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>Zodiac Cipher Geocache</h1>
     <p>Decode the symbols below to find today's password:</p>
-
     <div id="cipher">
         <span class="line">🌀 ✉️ 🔺 🌊 🍎 🔑 🌀 🔺 ✉️ 🌊</span>
         <span class="line">🔑 🌀 🌊 🔺 ✉️ 🍎 🔑 🔺 🌊 🌀</span>
@@ -94,9 +48,7 @@
 
     <div id="masterDisplay">
         <p>Earned Master Passwords:</p>
-        <ul id="masterList">
-            <!-- Earned passwords will appear here -->
-        </ul>
+        <ul id="masterList"></ul>
     </div>
 </div>
 
@@ -134,9 +86,7 @@ function generateMathPuzzle() {
 
 // Update math puzzle every 1 minute
 setInterval(() => {
-    if(document.getElementById("mathPuzzle").style.display !== "none") {
-        generateMathPuzzle();
-    }
+    if(document.getElementById("mathPuzzle").style.display !== "none") generateMathPuzzle();
 }, 60000);
 
 // --- Step 1: Check cipher input ---
@@ -146,7 +96,8 @@ function checkCipher() {
     const passwordEl = document.getElementById("password");
     const finalInput = document.getElementById("passwordInput");
 
-    if (input === correctCipherPassword || input === masterGlobal.toUpperCase() || masterCipherEarned) {
+    // Step 1 valid if user enters correct password, global master, or earned cipher master
+    if(input === correctCipherPassword || input === masterGlobal.toUpperCase() || input === masterCipherPassword.toUpperCase() || masterCipherEarned) {
         feedback.innerText = "Cipher correct! Solve the math puzzle below or use the revealed password.";
         passwordEl.innerText = `Today's password is: ${correctCipherPassword}`;
         finalInput.disabled = false;
@@ -174,7 +125,7 @@ function checkFinalPassword() {
     const passwordEl = document.getElementById("password");
     const coordsEl = document.getElementById("coordinates");
 
-    // Global master password always works
+    // Global master always works
     if(input === masterGlobal.toUpperCase()) {
         feedback.innerText = "Congratulations!";
         passwordEl.innerText = `Master access granted`;
@@ -184,10 +135,11 @@ function checkFinalPassword() {
         return;
     }
 
-    // Step 1 must be valid
-    const step1Valid = cipherInput === correctCipherPassword || input === masterCipherPassword.toUpperCase() || masterCipherEarned;
+    // Step 1 must be valid (solved or Step 1 master earned)
+    const step1Valid = cipherInput === correctCipherPassword || cipherInput === masterCipherPassword.toUpperCase() || masterCipherEarned;
 
     if(step1Valid) {
+        // Accept correct cipher password, math answer, or Step 2 master
         if(input === correctCipherPassword || parseInt(input) === currentMathAnswer || input === masterMathPassword.toUpperCase() || masterMathEarned) {
             feedback.innerText = "Congratulations!";
             passwordEl.innerText = `Today's password is: ${correctCipherPassword}`;
