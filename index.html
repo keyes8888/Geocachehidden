@@ -55,6 +55,11 @@
             font-size: 1.3em; 
             color: #ff77ff;
         }
+        #masterDisplay {
+            margin-top: 15px;
+            font-size: 1.2em;
+            color: #ffbb55;
+        }
     </style>
 </head>
 <body>
@@ -86,6 +91,13 @@
     <p id="feedback"></p>
     <p id="password"></p>
     <p id="coordinates"></p>
+
+    <div id="masterDisplay">
+        <p>Earned Master Passwords:</p>
+        <ul id="masterList">
+            <!-- Earned passwords will appear here -->
+        </ul>
+    </div>
 </div>
 
 <script>
@@ -94,12 +106,22 @@ const finalCoordinates = "1-2-3-4-Marcus-Patrick-x-10";
 
 // Master passwords
 const masterGlobal = "MARCUSPATRICK";   // works anywhere
-let masterCipherEarned = false;         // earned after Step 1
-let masterMathEarned = false;           // earned after Step 2
 const masterCipherPassword = "CIPHERMASTER";  
 const masterMathPassword = "MATHMASTER";
 
+// Track earned passwords
+let masterCipherEarned = false;
+let masterMathEarned = false;
+
 let currentMathAnswer = 0;
+
+// --- Display earned master passwords ---
+function displayMasterPasswords() {
+    const list = document.getElementById("masterList");
+    list.innerHTML = "";
+    if(masterCipherEarned) list.innerHTML += `<li>${masterCipherPassword} (Step 1)</li>`;
+    if(masterMathEarned) list.innerHTML += `<li>${masterMathPassword} (Step 2)</li>`;
+}
 
 // --- Generate math puzzle ---
 function generateMathPuzzle() {
@@ -124,15 +146,17 @@ function checkCipher() {
     const passwordEl = document.getElementById("password");
     const finalInput = document.getElementById("passwordInput");
 
-    // Global or earned master password for Step 1
     if (input === correctCipherPassword || input === masterGlobal.toUpperCase() || masterCipherEarned) {
         feedback.innerText = "Cipher correct! Solve the math puzzle below or use the revealed password.";
         passwordEl.innerText = `Today's password is: ${correctCipherPassword}`;
         finalInput.disabled = false;
         document.getElementById("mathPuzzle").style.display = "block";
         generateMathPuzzle();
-        masterCipherEarned = true; // earn Step 1 master password
-        console.log(`You have earned the Step 1 master password: ${masterCipherPassword}`);
+        if(!masterCipherEarned) {
+            masterCipherEarned = true;
+            displayMasterPasswords();
+            console.log(`You have earned the Step 1 master password: ${masterCipherPassword}`);
+        }
     } else {
         feedback.innerText = "YOU HAVE GOT IT WRONG";
         passwordEl.innerText = "";
@@ -155,22 +179,24 @@ function checkFinalPassword() {
         feedback.innerText = "Congratulations!";
         passwordEl.innerText = `Master access granted`;
         coordsEl.innerText = finalCoordinates;
-        masterMathEarned = true; // earn Step 2 master password too
-        console.log(`You have earned the Step 2 master password: ${masterMathPassword}`);
+        if(!masterMathEarned) masterMathEarned = true;
+        displayMasterPasswords();
         return;
     }
 
-    // Step 1 must be valid (solved or Step 1 master earned)
+    // Step 1 must be valid
     const step1Valid = cipherInput === correctCipherPassword || input === masterCipherPassword.toUpperCase() || masterCipherEarned;
 
     if(step1Valid) {
-        // Accept correct cipher password, correct math answer, or Step 2 master
         if(input === correctCipherPassword || parseInt(input) === currentMathAnswer || input === masterMathPassword.toUpperCase() || masterMathEarned) {
             feedback.innerText = "Congratulations!";
             passwordEl.innerText = `Today's password is: ${correctCipherPassword}`;
             coordsEl.innerText = finalCoordinates;
-            masterMathEarned = true; // earn Step 2 master password
-            console.log(`You have earned the Step 2 master password: ${masterMathPassword}`);
+            if(!masterMathEarned) {
+                masterMathEarned = true;
+                displayMasterPasswords();
+                console.log(`You have earned the Step 2 master password: ${masterMathPassword}`);
+            }
         } else {
             feedback.innerText = "YOU HAVE GOT IT WRONG";
             passwordEl.innerText = "";
