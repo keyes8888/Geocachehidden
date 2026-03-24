@@ -50,6 +50,11 @@
             width: fit-content;
         }
         .line { display: block; }
+        #mathPuzzle { 
+            margin-top: 20px; 
+            font-size: 1.3em; 
+            color: #ff77ff;
+        }
     </style>
 </head>
 <body>
@@ -72,7 +77,9 @@
     <input type="text" id="cipherInput" placeholder="Decode the cipher">
     <button onclick="checkCipher()">Submit</button>
 
-    <p>Step 2: Enter the password given after Step 1:</p>
+    <div id="mathPuzzle" style="display:none;"></div>
+
+    <p>Step 2: Enter the password given after Step 1 (or the math puzzle answer):</p>
     <input type="text" id="passwordInput" placeholder="Enter password" disabled>
     <button onclick="checkFinalPassword()">Unlock</button>
 
@@ -83,8 +90,27 @@
 
 <script>
 const correctCipherPassword = "GEOCACHE";
-const finalCoordinates = "1-10-Patricks-hidden-place";
 const masterPassword = "MARCUSPATRICK";
+let finalCoordinates = "1-2-3-4-Marcus-Patrick-x-10";
+
+// --- Dynamic math puzzle ---
+let currentMathAnswer = 0;
+
+function generateMathPuzzle() {
+    // Simple dynamic math problem: random addition/subtraction
+    const a = Math.floor(Math.random() * 50) + 1;
+    const b = Math.floor(Math.random() * 50) + 1;
+    const op = Math.random() < 0.5 ? '+' : '-';
+    currentMathAnswer = op === '+' ? a + b : a - b;
+    document.getElementById("mathPuzzle").innerText = `Solve this: ${a} ${op} ${b} = ?`;
+}
+
+// Update math puzzle every 1 minute
+setInterval(() => {
+    if(document.getElementById("mathPuzzle").style.display !== "none") {
+        generateMathPuzzle();
+    }
+}, 60000);
 
 // --- Step 1: Check cipher input ---
 function checkCipher() {
@@ -95,18 +121,21 @@ function checkCipher() {
     const finalInput = document.getElementById("passwordInput");
 
     if (input === correctCipherPassword || input === masterPassword.toUpperCase()) {
-        feedback.innerText = "Cipher correct! Enter the password below.";
+        feedback.innerText = "Cipher correct! Solve the math puzzle below or use the revealed password.";
         passwordEl.innerText = `Today's password is: ${correctCipherPassword}`;
-        finalInput.disabled = false; // Enable second box
+        finalInput.disabled = false;
+        document.getElementById("mathPuzzle").style.display = "block";
+        generateMathPuzzle();
     } else {
         feedback.innerText = "YOU HAVE GOT IT WRONG";
         passwordEl.innerText = "";
         coordsEl.innerText = "";
         finalInput.disabled = true;
+        document.getElementById("mathPuzzle").style.display = "none";
     }
 }
 
-// --- Step 2: Check final password ---
+// --- Step 2: Check final password / math answer ---
 function checkFinalPassword() {
     const cipherInput = document.getElementById("cipherInput").value.trim().toUpperCase();
     const input = document.getElementById("passwordInput").value.trim().toUpperCase();
@@ -114,10 +143,26 @@ function checkFinalPassword() {
     const passwordEl = document.getElementById("password");
     const coordsEl = document.getElementById("coordinates");
 
-    if (input === correctCipherPassword && (cipherInput === correctCipherPassword || cipherInput === masterPassword.toUpperCase()) || input === masterPassword.toUpperCase()) {
+    // Allow master password at any time
+    if (input === masterPassword.toUpperCase()) {
         feedback.innerText = "Congratulations!";
-        passwordEl.innerText = `Today's password is: ${correctCipherPassword}`;
+        passwordEl.innerText = `Master access granted`;
         coordsEl.innerText = finalCoordinates;
+        return;
+    }
+
+    // Check if Step 1 was correct or master password, then check math answer
+    if (cipherInput === correctCipherPassword || cipherInput === masterPassword.toUpperCase()) {
+        // Accept either the correct cipher password again OR the math puzzle answer
+        if (input === correctCipherPassword || parseInt(input) === currentMathAnswer) {
+            feedback.innerText = "Congratulations!";
+            passwordEl.innerText = `Today's password is: ${correctCipherPassword}`;
+            coordsEl.innerText = finalCoordinates;
+        } else {
+            feedback.innerText = "YOU HAVE GOT IT WRONG";
+            passwordEl.innerText = "";
+            coordsEl.innerText = "";
+        }
     } else {
         feedback.innerText = "YOU HAVE GOT IT WRONG";
         passwordEl.innerText = "";
@@ -127,7 +172,7 @@ function checkFinalPassword() {
 
 // --- Console hints ---
 console.log("Hint: Some symbols repeat. Recognize the patterns to decode 'GEOCACHE'.");
-console.log("Master password 'marcuspatrick' works anytime.");
+console.log("Math puzzle changes every 1 minute. Master password 'marcuspatrick' works anytime.");
 </script>
 </body>
 </html>
