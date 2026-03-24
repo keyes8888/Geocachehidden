@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Geocache Challenge</title>
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            margin-top: 80px;
+            background: #111;
+            color: #eee;
+        }
+        .box {
+            background: #222;
+            padding: 30px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        h1 { color: #00ffcc; }
+        code { color: #ffcc00; }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h1>Daily Cipher Challenge</h1>
+
+    <p>
+        Cipher:<br><br>
+        Take the word <b>GEOCACHE</b><br>
+        Shift each letter by today's day number<br>
+        Then hash using SHA-256<br>
+        Take first 6 characters
+    </p>
+
+    <h2 id="password">Loading...</h2>
+</div>
+
+<script>
+function getDayOfYear() {
+    const now = new Date();
+    const start = new Date(now.getFullYear(), 0, 0);
+    return Math.floor((now - start) / (1000 * 60 * 60 * 24));
+}
+
+function shiftCipher(text, shift) {
+    return text.split('').map(c => {
+        let code = c.charCodeAt(0) - 65;
+        code = (code + shift) % 26;
+        return String.fromCharCode(code + 65);
+    }).join('');
+}
+
+async function generatePassword() {
+    const base = "GEOCACHE";
+    const shift = getDayOfYear();
+
+    const shifted = shiftCipher(base, shift);
+
+    const encoder = new TextEncoder();
+    const data = encoder.encode(shifted);
+
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+    document.getElementById("password").innerText = hashHex.slice(0, 6);
+}
+
+generatePassword();
+</script>
+
+</body>
+</html>
