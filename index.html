@@ -6,139 +6,166 @@
 <title>Zodiac Cipher Geocache</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  body {
-    margin: 0;
+/* --- General Page Styles --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
     font-family: 'Roboto', sans-serif;
+    min-height: 100vh;
     background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
     color: #eee;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-    padding: 40px 20px;
-  }
+    align-items: center;
+    overflow-x: hidden;
+}
 
-  .container {
-    background: #1a1a1a;
-    border-radius: 20px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-    padding: 40px 50px;
-    max-width: 800px;
-    width: 100%;
-  }
+/* --- Main Container --- */
+.container {
+    background: #1c1c1c;
+    border-radius: 25px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    width: 90%;
+    max-width: 1000px;
+    padding: 50px 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeIn 1s ease;
+}
 
-  h1 {
-    text-align: center;
+/* --- Headings --- */
+h1 {
     color: #00ffcc;
+    font-size: 3rem;
     font-weight: 700;
-    margin-bottom: 25px;
-  }
+    margin-bottom: 40px;
+    text-align: center;
+    letter-spacing: 2px;
+}
 
-  .section {
-    background: #222;
-    padding: 25px;
-    border-radius: 15px;
-    margin-bottom: 25px;
-    transition: background 0.3s ease;
-  }
+/* --- Sections --- */
+.section {
+    background: #262626;
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 900px;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+.section:hover {
+    transform: translateY(-3px);
+    background: #2d2d2d;
+}
 
-  .section:hover {
-    background: #2b2b2b;
-  }
-
-  .cipher {
-    font-size: 1.5em;
-    line-height: 2em;
+/* --- Cipher Display --- */
+.cipher {
+    font-size: 2rem;
+    line-height: 2.5rem;
     text-align: center;
     background: #111;
-    padding: 20px;
-    border-radius: 15px;
-    margin-bottom: 20px;
-  }
+    padding: 25px;
+    border-radius: 20px;
+    margin-bottom: 25px;
+    letter-spacing: 3px;
+}
 
-  input[type=text] {
-    padding: 12px;
+/* --- Inputs and Buttons --- */
+input[type=text] {
+    padding: 14px 20px;
     font-size: 16px;
-    border-radius: 10px;
+    border-radius: 12px;
     border: 1px solid #555;
-    width: 220px;
-    margin-right: 10px;
+    margin-right: 12px;
+    width: 250px;
     transition: border 0.3s ease;
-  }
-
-  input[type=text]:focus {
+}
+input[type=text]:focus {
     outline: none;
     border: 2px solid #00ffcc;
-  }
+}
 
-  button {
-    padding: 12px 25px;
+button {
+    padding: 14px 30px;
     font-size: 16px;
-    border-radius: 10px;
+    border-radius: 12px;
     border: none;
     cursor: pointer;
     background: #00ffcc;
     color: #111;
     font-weight: 700;
     transition: background 0.3s ease, transform 0.2s ease;
-  }
-
-  button:hover {
+}
+button:hover {
     background: #00ddbb;
     transform: translateY(-2px);
-  }
+}
 
-  #feedback {
-    font-size: 1.2em;
-    margin-top: 15px;
+/* --- Feedback Banners --- */
+#feedback {
+    font-size: 1.3rem;
     font-weight: 700;
-  }
+    margin-top: 20px;
+    padding: 15px 25px;
+    border-radius: 15px;
+    display: inline-block;
+    background: #333;
+    color: #ffcc00;
+    min-width: 300px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
 
-  #password, #coordinates {
-    font-size: 1.5em;
-    margin-top: 10px;
-    font-weight: 700;
-  }
-
-  #mathPuzzle {
-    font-size: 1.3em;
+/* --- Math Puzzle --- */
+#mathPuzzle {
+    font-size: 1.5rem;
     color: #ff77ff;
     font-weight: 600;
     margin-top: 15px;
-    padding: 15px;
-    border-radius: 10px;
+    padding: 20px;
+    border-radius: 15px;
     background: #2a1a2b;
     display: none;
     text-align: center;
-  }
+}
 
-  #masterDisplay {
-    margin-top: 20px;
-  }
-
-  #masterDisplay ul {
+/* --- Master Passwords Display --- */
+#masterDisplay ul {
     list-style: none;
-    padding: 0;
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
     justify-content: center;
-  }
-
-  #masterDisplay li {
+    gap: 15px;
+    margin-top: 15px;
+}
+#masterDisplay li {
     background: #ffbb55;
     color: #111;
-    padding: 8px 15px;
-    border-radius: 20px;
+    padding: 10px 20px;
+    border-radius: 25px;
     font-weight: 700;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     cursor: pointer;
-    transition: transform 0.2s ease;
-  }
-
-  #masterDisplay li:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    transition: transform 0.2s ease, background 0.3s ease;
+}
+#masterDisplay li:hover {
     transform: scale(1.1);
-  }
+    background: #ffaa33;
+}
+
+/* --- Animations --- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Responsive --- */
+@media(max-width: 768px){
+    h1 { font-size: 2.2rem; }
+    .cipher { font-size: 1.6rem; line-height: 2rem; }
+    input[type=text] { width: 200px; margin-bottom: 10px; }
+    button { width: 100%; margin-top: 10px; }
+}
 </style>
 </head>
 <body>
@@ -146,7 +173,7 @@
   <h1>Zodiac Cipher Geocache</h1>
 
   <div class="section">
-    <p><strong>Step 1:</strong> Decode the cipher below to get today's password:</p>
+    <p><strong>Step 1:</strong> Decode the cipher below:</p>
     <div class="cipher" id="cipher">
       <span>🌀 ✉️ 🔺 🌊 🍎 🔑 🌀 🔺 ✉️ 🌊</span><br>
       <span>🔑 🌀 🌊 🔺 ✉️ 🍎 🔑 🔺 🌊 🌀</span><br>
@@ -157,20 +184,18 @@
       <span>🔺 🌀 ✉️ 🌊 🔑 🍎 🔺 🔑 🌀 ✉️</span><br>
       <span>🌊 🔑 🍎 🔺 🔑 🌀 ✉️ 🌊 🍎 🔑</span>
     </div>
-
     <input type="text" id="cipherInput" placeholder="Decode the cipher">
     <button onclick="checkCipher()">Submit</button>
   </div>
 
   <div class="section" id="mathSection">
     <div id="mathPuzzle"></div>
-    <p><strong>Step 2:</strong> Enter the password from Step 1 or the math puzzle answer:</p>
+    <p><strong>Step 2:</strong> Enter the Step 1 password or solve the math puzzle:</p>
     <input type="text" id="passwordInput" placeholder="Enter password" disabled>
     <button onclick="checkFinalPassword()">Unlock</button>
   </div>
 
   <div id="feedback"></div>
-  <div id="password"></div>
   <div id="coordinates"></div>
 
   <div id="masterDisplay">
@@ -180,7 +205,7 @@
 </div>
 
 <script>
-// --- Puzzle & Master Password Logic ---
+// --- Puzzle Logic ---
 const correctCipherPassword = "GEOCACHE";
 const finalCoordinates = "1-2-3-4-Marcus-Patrick-x-10";
 const masterGlobal = "MARCUSPATRICK";
@@ -191,101 +216,80 @@ let masterCipherEarned = false;
 let masterMathEarned = false;
 let currentMathAnswer = 0;
 
-function displayMasterPasswords() {
-  const list = document.getElementById("masterList");
-  list.innerHTML = "";
-  if(masterCipherEarned) list.innerHTML += `<li onclick="autoFill('${masterCipherPassword}', 'cipher')">${masterCipherPassword} (Step 1)</li>`;
-  if(masterMathEarned) list.innerHTML += `<li onclick="autoFill('${masterMathPassword}', 'final')">${masterMathPassword} (Step 2)</li>`;
+// Display earned passwords
+function displayMasterPasswords(){
+    const list = document.getElementById("masterList");
+    list.innerHTML = "";
+    if(masterCipherEarned) list.innerHTML += `<li onclick="autoFill('${masterCipherPassword}','cipher')">${masterCipherPassword} (Step 1)</li>`;
+    if(masterMathEarned) list.innerHTML += `<li onclick="autoFill('${masterMathPassword}','final')">${masterMathPassword} (Step 2)</li>`;
+}
+function autoFill(password, step){
+    if(step==='cipher') document.getElementById("cipherInput").value = password;
+    if(step==='final') document.getElementById("passwordInput").value = password;
 }
 
-// Auto-fill input boxes when clicking earned master password
-function autoFill(password, step) {
-  if(step === 'cipher') document.getElementById("cipherInput").value = password;
-  if(step === 'final') document.getElementById("passwordInput").value = password;
+// Math puzzle
+function generateMathPuzzle(){
+    const a=Math.floor(Math.random()*50)+1;
+    const b=Math.floor(Math.random()*50)+1;
+    const op=Math.random()<0.5?'+':'-';
+    currentMathAnswer = op==='+'? a+b : a-b;
+    document.getElementById("mathPuzzle").innerText=`Solve this: ${a} ${op} ${b} = ?`;
 }
+setInterval(()=>{ if(document.getElementById("mathPuzzle").style.display!=='none') generateMathPuzzle(); }, 60000);
 
-// --- Math puzzle ---
-function generateMathPuzzle() {
-  const a = Math.floor(Math.random()*50)+1;
-  const b = Math.floor(Math.random()*50)+1;
-  const op = Math.random()<0.5 ? '+' : '-';
-  currentMathAnswer = op==='+' ? a+b : a-b;
-  document.getElementById("mathPuzzle").innerText = `Solve this: ${a} ${op} ${b} = ?`;
-}
+// Step 1
+function checkCipher(){
+    const input=document.getElementById("cipherInput").value.trim().toUpperCase();
+    const feedback=document.getElementById("feedback");
+    const finalInput=document.getElementById("passwordInput");
 
-setInterval(() => {
-  if(document.getElementById("mathPuzzle").style.display !== "none") generateMathPuzzle();
-}, 60000);
-
-// --- Step 1 ---
-function checkCipher() {
-  const input = document.getElementById("cipherInput").value.trim().toUpperCase();
-  const feedback = document.getElementById("feedback");
-  const passwordEl = document.getElementById("password");
-  const finalInput = document.getElementById("passwordInput");
-
-  if([correctCipherPassword, masterGlobal, masterCipherPassword].includes(input) || masterCipherEarned) {
-    feedback.innerText = "Cipher correct! Solve the math puzzle or use the revealed password.";
-    passwordEl.innerText = `Today's password: ${correctCipherPassword}`;
-    finalInput.disabled = false;
-    document.getElementById("mathPuzzle").style.display = "block";
-    generateMathPuzzle();
-    if(!masterCipherEarned) {
-      masterCipherEarned = true;
-      displayMasterPasswords();
-      console.log(`Step 1 master password earned: ${masterCipherPassword}`);
-    }
-  } else {
-    feedback.innerText = "YOU HAVE GOT IT WRONG";
-    passwordEl.innerText = "";
-    document.getElementById("coordinates").innerText = "";
-    finalInput.disabled = true;
-    document.getElementById("mathPuzzle").style.display = "none";
-  }
-}
-
-// --- Step 2 ---
-function checkFinalPassword() {
-  const cipherInput = document.getElementById("cipherInput").value.trim().toUpperCase();
-  const input = document.getElementById("passwordInput").value.trim().toUpperCase();
-  const feedback = document.getElementById("feedback");
-  const passwordEl = document.getElementById("password");
-  const coordsEl = document.getElementById("coordinates");
-
-  if(input === masterGlobal) {
-    feedback.innerText = "Congratulations!";
-    passwordEl.innerText = `Master access granted`;
-    coordsEl.innerText = finalCoordinates;
-    masterMathEarned = true;
-    displayMasterPasswords();
-    return;
-  }
-
-  const step1Valid = [correctCipherPassword, masterCipherPassword].includes(cipherInput) || masterCipherEarned;
-
-  if(step1Valid) {
-    if([correctCipherPassword, masterMathPassword].includes(input) || parseInt(input) === currentMathAnswer || masterMathEarned) {
-      feedback.innerText = "Congratulations!";
-      passwordEl.innerText = `Today's password: ${correctCipherPassword}`;
-      coordsEl.innerText = finalCoordinates;
-      if(!masterMathEarned) {
-        masterMathEarned = true;
-        displayMasterPasswords();
-        console.log(`Step 2 master password earned: ${masterMathPassword}`);
-      }
+    if([correctCipherPassword, masterGlobal, masterCipherPassword].includes(input) || masterCipherEarned){
+        feedback.innerText="Cipher correct! Solve the math puzzle or use the revealed password.";
+        finalInput.disabled=false;
+        document.getElementById("mathPuzzle").style.display="block";
+        generateMathPuzzle();
+        if(!masterCipherEarned){ masterCipherEarned=true; displayMasterPasswords(); }
     } else {
-      feedback.innerText = "YOU HAVE GOT IT WRONG";
-      passwordEl.innerText = "";
-      coordsEl.innerText = "";
+        feedback.innerText="YOU HAVE GOT IT WRONG";
+        document.getElementById("passwordInput").disabled=true;
+        document.getElementById("mathPuzzle").style.display="none";
+        document.getElementById("coordinates").innerText="";
     }
-  } else {
-    feedback.innerText = "YOU HAVE GOT IT WRONG";
-    passwordEl.innerText = "";
-    coordsEl.innerText = "";
-  }
 }
 
-console.log("Hint: Decode 'GEOCACHE'. Math puzzle changes every 1 minute. Global master password: MARCUSPATRICK");
+// Step 2
+function checkFinalPassword(){
+    const cipherInput=document.getElementById("cipherInput").value.trim().toUpperCase();
+    const input=document.getElementById("passwordInput").value.trim().toUpperCase();
+    const feedback=document.getElementById("feedback");
+    const coords=document.getElementById("coordinates");
+
+    if(input===masterGlobal){
+        feedback.innerText="Congratulations!";
+        coords.innerText=finalCoordinates;
+        masterMathEarned=true;
+        displayMasterPasswords();
+        return;
+    }
+
+    const step1Valid=[correctCipherPassword, masterCipherPassword].includes(cipherInput) || masterCipherEarned;
+    if(step1Valid){
+        if([correctCipherPassword, masterMathPassword].includes(input) || parseInt(input)===currentMathAnswer || masterMathEarned){
+            feedback.innerText="Congratulations!";
+            coords.innerText=finalCoordinates;
+            if(!masterMathEarned){ masterMathEarned=true; displayMasterPasswords(); }
+        } else {
+            feedback.innerText="YOU HAVE GOT IT WRONG";
+            coords.innerText="";
+        }
+    } else {
+        feedback.innerText="YOU HAVE GOT IT WRONG";
+        coords.innerText="";
+    }
+}
+
+console.log("Hint: Decode 'GEOCACHE'. Math puzzle updates every minute. Global master password: MARCUSPATRICK");
 </script>
 </body>
 </html>
