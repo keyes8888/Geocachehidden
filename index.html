@@ -52,7 +52,8 @@ h1 {
     margin-bottom: 30px;
     width: 100%;
     max-width: 900px;
-    transition: transform 0.3s ease, background 0.3s ease;
+    transition: transform 0.3s ease, background 0.3s ease, opacity 0.5s ease;
+    text-align: center; /* center all text in sections */
 }
 .section:hover {
     transform: translateY(-3px);
@@ -125,6 +126,15 @@ button:hover {
 }
 
 /* --- Math Puzzle --- */
+#mathSection {
+    opacity: 0;
+    transform: translateX(100%);
+}
+#mathSection.active {
+    opacity: 1;
+    transform: translateX(0);
+    transition: transform 0.7s ease, opacity 0.7s ease;
+}
 #mathPuzzle {
     font-size: 1.5rem;
     color: #ff77ff;
@@ -257,23 +267,26 @@ function generateMathPuzzle(){
     currentMathAnswer = op==='+'? a+b : a-b;
     document.getElementById("mathPuzzle").innerText=`Solve this: ${a} ${op} ${b} = ?`;
 }
-setInterval(()=>{ if(document.getElementById("mathPuzzle").style.display!=='none') generateMathPuzzle(); }, 60000);
+setInterval(()=>{ if(document.getElementById("mathSection").classList.contains("active")) generateMathPuzzle(); }, 60000);
 
 // Step 1
 function checkCipher(){
     const input=document.getElementById("cipherInput").value.trim().toUpperCase();
     const feedback=document.getElementById("feedback");
     const finalInput=document.getElementById("passwordInput");
+    const mathSection=document.getElementById("mathSection");
 
     if([correctCipherPassword, masterGlobal, masterCipherPassword].includes(input) || masterCipherEarned){
         feedback.innerText="Cipher correct! Solve the math puzzle or use the revealed password.";
         finalInput.disabled=false;
         document.getElementById("mathPuzzle").style.display="block";
+        mathSection.classList.add("active"); // slide in
         generateMathPuzzle();
         if(!masterCipherEarned){ masterCipherEarned=true; displayMasterPasswords(); }
     } else {
         feedback.innerText="YOU HAVE GOT IT WRONG";
-        document.getElementById("passwordInput").disabled=true;
+        finalInput.disabled=true;
+        mathSection.classList.remove("active");
         document.getElementById("mathPuzzle").style.display="none";
         document.getElementById("coordinates").innerText="";
     }
