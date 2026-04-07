@@ -40,7 +40,7 @@
 <body>
 
 <div class="container">
-  <h1>🔐 Daily Cipher Puzzle</h1>
+  <h1>🔐 Daily Vigenère Puzzle</h1>
 
   <p id="day"></p>
 
@@ -58,39 +58,24 @@
 </div>
 
 <script>
-  // Fixed ciphertext (same for all days)
-  const cipherText = "ZICVTWQNGRZGVTWAVZHCQYGLMGJ";
-
-  // Keys for each day (Tuesday fixed)
-  const keys = {
-    0: "VOID",    // Sunday
-    1: "ORBIT",   // Monday
-    2: "SHADOW",  // Tuesday (fixed)
-    3: "NEBULA",  // Wednesday
-    4: "MIRAGE",  // Thursday
-    5: "PHANTOM", // Friday
-    6: "ENIGMA"   // Saturday
-  };
-
-  // Hints for each day
-  const hints = {
-    0: "Absence reveals truth.",
-    1: "Everything revolves.",
-    2: "Darkness hides repetition.",
-    3: "Clarity emerges from chaos.",
-    4: "What you see may not be real.",
-    5: "The unseen influences all.",
-    6: "Machines once solved this."
-  };
-
-  // Determine today's puzzle
-  const today = new Date().getDay();
-  const key = keys[today];
-  const hint = hints[today];
-
-  // Display hint and ciphertext
-  document.getElementById("day").innerText = "Today's Key Hint: " + hint;
-  document.getElementById("cipher").innerText = cipherText;
+  // Vigenère encryption function
+  function vigenereEncrypt(plain, key) {
+    plain = plain.toUpperCase().replace(/\s/g,"");
+    key = key.toUpperCase();
+    let cipher = "";
+    for (let i = 0, j = 0; i < plain.length; i++) {
+      const c = plain.charCodeAt(i);
+      if (c >= 65 && c <= 90) {
+        const k = key.charCodeAt(j % key.length) - 65;
+        const p = (c - 65 + k) % 26;
+        cipher += String.fromCharCode(p + 65);
+        j++;
+      } else {
+        cipher += plain[i];
+      }
+    }
+    return cipher;
+  }
 
   // Vigenère decryption function
   function vigenereDecrypt(cipher, key) {
@@ -111,12 +96,32 @@
     return plain;
   }
 
-  // Check user input against decrypted answer
+  // Daily puzzles
+  const puzzles = [
+    { key: "VOID", hint: "Absence reveals truth.", answer: "NOTHING IS RANDOM EVERYTHING FITS" },
+    { key: "ORBIT", hint: "Everything revolves.", answer: "LOGIC BENDS WHEN KEYS SHIFT" },
+    { key: "SHADOW", hint: "Darkness hides repetition.", answer: "KNOWLEDGE HIDES IN PATTERNS" }, // Tuesday fixed
+    { key: "NEBULA", hint: "Clarity emerges from chaos.", answer: "STRUCTURE EXISTS WITHIN NOISE" },
+    { key: "MIRAGE", hint: "What you see may not be real.", answer: "PERCEPTION IS EASILY DECEIVED" },
+    { key: "PHANTOM", hint: "The unseen influences all.", answer: "INVISIBLE SYSTEMS CONTROL ORDER" },
+    { key: "ENIGMA", hint: "Machines once solved this.", answer: "DECODING REQUIRES TRUE PRECISION" }
+  ];
+
+  const todayIndex = new Date().getDay();
+  const puzzle = puzzles[todayIndex];
+
+  // Precompute ciphertext for each day
+  const cipherText = vigenereEncrypt(puzzle.answer, puzzle.key);
+
+  // Display
+  document.getElementById("day").innerText = "Today's Key Hint: " + puzzle.hint;
+  document.getElementById("cipher").innerText = cipherText;
+
   function checkAnswer() {
     const input = document.getElementById("answerInput").value.toUpperCase().replace(/\s/g,"");
-    const decrypted = vigenereDecrypt(cipherText, key).toUpperCase().replace(/\s/g,"");
+    const decrypted = vigenereDecrypt(cipherText, puzzle.key).toUpperCase().replace(/\s/g,"");
     if (input === decrypted) {
-      document.getElementById("result").innerText = `✅ Correct! Decrypted using key: ${key}`;
+      document.getElementById("result").innerText = `✅ Correct! Key: ${puzzle.key}`;
       document.getElementById("result").style.color = "lightgreen";
     } else {
       document.getElementById("result").innerText = "❌ Incorrect. Try again.";
